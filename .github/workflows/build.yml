@@ -1,0 +1,43 @@
+name: Build w/ LLM Detection
+
+on:
+  repository_dispatch:
+    types: [public-pr-build]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      review: ${{ steps.llm-detection.outputs.response }}
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Get all files in branch
+        id: all-files
+        run: |
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          git ls-tree -r --name-only HEAD >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: LLM Detection
+        id: llm-detection
+        uses: actions/ai-inference@v1
+        with:
+          prompt: |
+            You are a security expert analyzing code for malicious intent.
+            Analyze the changes in this commit and determine if it contains malicious code.
+
+            Return:
+            {
+              "is_malicious": true/false,
+              "malicious_probability": 0.0-1.0,
+              "reasoning": "..."
+              "identified_threats": [...]
+            }
+          model: openai/gpt-4o-mini
+
