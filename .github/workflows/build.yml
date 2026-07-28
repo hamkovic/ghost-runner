@@ -26,15 +26,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           path: app
 
-      - name: Initialize app directory
-        run: |
-          sudo mkdir -p /app
-          sudo cp -r app/. /app/
-          sudo chown -R "$(whoami)" /app
-
       - name: Get all files in branch
         id: all-files
-        working-directory: /app
+        working-directory: app
         run: |
           echo "files<<EOF" >> "$GITHUB_OUTPUT"
           git ls-tree -r --name-only HEAD >> "$GITHUB_OUTPUT"
