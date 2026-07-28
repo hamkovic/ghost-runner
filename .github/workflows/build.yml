@@ -45,7 +45,8 @@ jobs:
         run: |
           set -e
           REVIEW=$(python3 llm-detection.py app)
-          echo "response<<EOF" >> "$GITHUB_OUTPUT"
+          DELIM="EOF_$(openssl rand -hex 8)"
+          echo "response<<$DELIM" >> "$GITHUB_OUTPUT"
           echo "$REVIEW" >> "$GITHUB_OUTPUT"
-          echo "EOF_$(openssl rand -hex 8)" >> $GITHUB_OUTPUT"
+          echo "$DELIM" >> $GITHUB_OUTPUT"
 
