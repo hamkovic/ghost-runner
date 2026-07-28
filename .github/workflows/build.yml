@@ -23,9 +23,9 @@ jobs:
         id: all-files
         run: |
           mkdir app
-          echo "files<<EOF" >> "$GITHUB_OUTPUT/app/"
-          git ls-tree -r --name-only HEAD >> "$GITHUB_OUTPUT/app/"
-          echo "EOF" >> "$GITHUB_OUTPUT/app/"
+          echo "files<<EOF" >> "./app/"
+          git ls-tree -r --name-only HEAD >> "./app/"
+          echo "EOF" >> "./app/"
           ls -l ./app
           ls -l ./
 
