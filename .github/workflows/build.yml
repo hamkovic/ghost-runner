@@ -21,27 +21,22 @@ jobs:
 
       - name: Get all files in branch
         id: all-files
+        working-directory: ./app
         run: |
           echo "files<<EOF" >> "$GITHUB_OUTPUT"
           git ls-tree -r --name-only HEAD >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
-          ls -l
+          ls -l ./app
 
       - name: LLM Detection
         id: llm-detection
-        uses: actions/ai-inference@v1
-        with:
-          token: ${{ secrets.LLM }}
-          prompt: |
-            You are a security expert analyzing code for malicious intent.
-            Analyze the changes in this commit and determine if it contains malicious code.
-
-            Return:
-            {
-              "is_malicious": true/false,
-              "malicious_probability": 0.0-1.0,
-              "reasoning": "..."
-              "identified_threats": [...]
-            }
-          model: openai/gpt-4o-mini
+        continue-on-error: true
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.LLM }}
+        run: |
+          set -e
+          REVIEW=${python3 llm-detection.py ./app}
+          echo "response<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$REVIEW" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> $GITHUB_OUTPUT"
 
