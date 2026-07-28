@@ -14,15 +14,19 @@ jobs:
     outputs:
       review: ${{ steps.llm-detection.outputs.response }}
     steps:
+      - name: Checkout workflow script
+        uses: actions/checkout@v4
+        
       - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          path: app
 
       - name: Initialize app directory
         run: |
           sudo mkdir -p /app
-          sudo cp -r "$GITHUB_WORKSPACE"/. /app/
+          sudo cp -r app/. /app/
           sudo chown -R "$(whoami)" /app
 
       - name: Get all files in branch
