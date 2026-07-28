@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: read
     outputs:
-      review: ${{ steps.llm-detection.outputs.response }}
+      review: ${{ steps.llm-detection.outputs.review }}
     steps:
       - name: Checkout workflow script
         uses: actions/checkout@v4
@@ -39,14 +39,13 @@ jobs:
 
       - name: LLM Detection
         id: llm-detection
-        continue-on-error: true
         env:
           DEEPSEEK_API_KEY: ${{ secrets.LLM }}
         run: |
           set -e
-          REVIEW=$(python3 llm-detection.py app)
+          REVIEW=$(python3 llm-detection.py app) || EXIT_CODE=$
           echo $REVIEW
-          echo "response<<EOF" >> "$GITHUB_OUTPUT"
+          echo "review<<EOF" >> "$GITHUB_OUTPUT"
           echo "$REVIEW" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
 
