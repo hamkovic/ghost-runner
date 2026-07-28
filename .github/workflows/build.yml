@@ -1,8 +1,10 @@
 name: build
 
 on:
-  repository_dispatch:
-    types: [public-pr-build]
+  workflow_call:
+    outputs:
+      review:
+        value: ${{ jobs.review.outputs.review }}
 
 jobs:
   build:
