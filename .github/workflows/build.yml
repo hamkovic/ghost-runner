@@ -35,7 +35,7 @@ jobs:
         run: |
           echo "files<<EOF" >> "$GITHUB_OUTPUT"
           git ls-tree -r --name-only HEAD >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "EOF_$(openssl rand -hex 8)" >> "$GITHUB_OUTPUT"
 
       - name: LLM Detection
         id: llm-detection
