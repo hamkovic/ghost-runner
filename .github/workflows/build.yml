@@ -16,6 +16,9 @@ jobs:
     steps:
       - name: Checkout workflow script
         uses: actions/checkout@v4
+        with:
+          repository: ${{ job.workflow_repository }}
+          ref: ${{ job.workflow_sha }}
         
       - name: Checkout PR branch
         uses: actions/checkout@v4
