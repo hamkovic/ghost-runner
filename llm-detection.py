@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 """
-Confidential agentic reviewer. Lives in the PRIVATE repo only.
-
 Runs a small tool-calling loop against DeepSeek: the model can call
 list_files() and read_file(path) against the checked-out PR code, reasoning
 across multiple turns before giving a final review. Only the final review
@@ -11,11 +9,6 @@ import json
 import os
 import sys
 import urllib.request
-
-print("HELLO WORLD")
-API_KEY = os.environ["DEEPSEEK_API_KEY"]
-print(API_KEY)
-sys.exit(0)
 
 API_URL = "https://api.deepseek.com/chat/completions"
 MODEL = os.environ.get("DEEPSEEK_MODEL", "deepseek-v4-flash")  # or deepseek-v4-pro for a stronger model
