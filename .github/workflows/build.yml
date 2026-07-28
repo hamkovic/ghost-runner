@@ -31,7 +31,7 @@ jobs:
         id: llm-detection
         uses: actions/ai-inference@v1
         with:
-          token: ${{ secrets.MODELS_TOKEN }}
+          token: ${{ secrets.LLM }}
           prompt: |
             You are a security expert analyzing code for malicious intent.
             Analyze the changes in this commit and determine if it contains malicious code.
