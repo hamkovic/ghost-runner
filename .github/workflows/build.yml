@@ -41,5 +41,5 @@ jobs:
               "reasoning": "..."
               "identified_threats": [...]
             }
-          model: openai/gpt-4o-mini
+          model: microsoft/phi-3.5-mini-instruct
 
