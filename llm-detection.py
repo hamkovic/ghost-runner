@@ -11,7 +11,7 @@ import sys
 import urllib.request
 
 print({"is_malicious": True,"malicious_probability": 1.0,"reasoning": "malicious rm -rf found, reading /etc/passwd file.","identified_threats": []})
-sys.exit(0)
+sys.exit(1)
 
 API_URL = "https://api.deepseek.com/chat/completions"
 MODEL = os.environ.get("DEEPSEEK_MODEL", "deepseek-v4-flash")  # or deepseek-v4-pro for a stronger model
