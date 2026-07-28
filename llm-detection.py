@@ -13,7 +13,7 @@ import urllib.request
 API_URL = "https://api.deepseek.com/chat/completions"
 MODEL = os.environ.get("DEEPSEEK_MODEL", "deepseek-v4-flash")  # or deepseek-v4-pro for a stronger model
 CODE_DIR = sys.argv[1] if len(sys.argv) > 1 else "./app"
-MAX_TURNS = 8
+MAX_TURNS = 1
 MAX_FILE_BYTES = 20_000  # guard against dumping huge/binary files into the prompt
 
 API_KEY = os.environ["DEEPSEEK_API_KEY"]
