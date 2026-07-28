@@ -48,5 +48,5 @@ jobs:
           DELIM="EOF_$(openssl rand -hex 8)"
           echo "response<<$DELIM" >> "$GITHUB_OUTPUT"
           echo "$REVIEW" >> "$GITHUB_OUTPUT"
-          echo "$DELIM" >> $GITHUB_OUTPUT"
+          echo "$DELIM" >> "$GITHUB_OUTPUT"
 
