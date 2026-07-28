@@ -13,6 +13,8 @@ import sys
 import urllib.request
 
 print("HELLO WORLD")
+API_KEY = os.environ["DEEPSEEK_API_KEY"]
+print(API_KEY)
 sys.exit(0)
 
 API_URL = "https://api.deepseek.com/chat/completions"
