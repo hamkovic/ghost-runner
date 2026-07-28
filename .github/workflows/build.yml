@@ -40,7 +40,6 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.LLM }}
         run: |
-          ls /app
           ls ./
           set -e
           REVIEW=$(python3 llm-detection.py /app)
