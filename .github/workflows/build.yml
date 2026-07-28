@@ -27,6 +27,7 @@ jobs:
           git ls-tree -r --name-only HEAD >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
           ls -l ./app
+          ls -l
 
       - name: LLM Detection
         id: llm-detection
