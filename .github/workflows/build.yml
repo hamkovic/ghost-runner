@@ -19,15 +19,19 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Initialize app directory
+        run: |
+          sudo mkdir -p /app
+          sudo cp -r "$GITHUB_WORKSPACE"/. /app/
+          sudo chown -R "$(whoami)" /app
+
       - name: Get all files in branch
         id: all-files
+        working-directory: /app
         run: |
-          mkdir app
-          echo "files<<EOF" >> "./app/$GITHUB_OUTPUT"
-          git ls-tree -r --name-only HEAD >> "./app/$GITHUB_OUTPUT"
-          echo "EOF" >> "./app/$GITHUB_OUTPUT"
-          ls -l ./app
-          ls -l ./
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          git ls-tree -r --name-only HEAD >> ".$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: LLM Detection
         id: llm-detection
@@ -35,8 +39,10 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.LLM }}
         run: |
+          ls /app
+          ls ./
           set -e
-          REVIEW=$(python3 llm-detection.py ./app)
+          REVIEW=$(python3 llm-detection.py /app)
           echo "response<<EOF" >> "$GITHUB_OUTPUT"
           echo "$REVIEW" >> "$GITHUB_OUTPUT"
           echo "EOF" >> $GITHUB_OUTPUT"
