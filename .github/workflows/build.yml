@@ -45,7 +45,7 @@ jobs:
         run: |
           set -e
           echo $DEEPSEEK_API_KEY
-          REVIEW=$(python3 llm-detection.py app)
+          python3 llm-detection.py app
           echo "response<<EOF" >> "$GITHUB_OUTPUT"
           echo "$REVIEW" >> "$GITHUB_OUTPUT"
           echo "EOF" >> $GITHUB_OUTPUT"
