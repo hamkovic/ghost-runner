@@ -21,8 +21,9 @@ jobs:
 
       - name: Get all files in branch
         id: all-files
-        working-directory: app
         run: |
+          mkdir app
+          cd app
           echo "files<<EOF" >> "$GITHUB_OUTPUT"
           git ls-tree -r --name-only HEAD >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
