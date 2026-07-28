@@ -10,7 +10,7 @@ import os
 import sys
 import urllib.request
 
-print('{"is_malicious": true,"malicious_probability": 1.0,"reasoning": "malicious rm -rf found, reading /etc/passwd file.","identified_threats": [...]}")
+print({"is_malicious": true,"malicious_probability": 1.0,"reasoning": "malicious rm -rf found, reading /etc/passwd file.","identified_threats": []})
 sys.exit(0)
 
 API_URL = "https://api.deepseek.com/chat/completions"
