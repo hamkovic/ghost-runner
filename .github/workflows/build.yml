@@ -22,14 +22,12 @@ jobs:
       - name: Get all files in branch
         id: all-files
         run: |
-          pwd
           mkdir app
-          cd app
-          echo "files<<EOF" >> "$GITHUB_OUTPUT"
-          git ls-tree -r --name-only HEAD >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "files<<EOF" >> "$GITHUB_OUTPUT/app/"
+          git ls-tree -r --name-only HEAD >> "$GITHUB_OUTPUT/app/"
+          echo "EOF" >> "$GITHUB_OUTPUT/app/"
+          ls -l ./app
           ls -l ./
-          ls -l ../
 
       - name: LLM Detection
         id: llm-detection
@@ -37,8 +35,6 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.LLM }}
         run: |
-          ls -l
-          pwd
           set -e
           REVIEW=$(python3 llm-detection.py ./app)
           echo "response<<EOF" >> "$GITHUB_OUTPUT"
