@@ -43,6 +43,7 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.LLM }}
         run: |
           set -e
+          pip install claude-agent-sdk
           REVIEW=$(python3 llm-detection.py app) || EXIT_CODE=$
           echo $REVIEW
           echo "review<<EOF" >> "$GITHUB_OUTPUT"
