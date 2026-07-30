@@ -230,5 +230,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    print(f"ENV: {os.environ["LLM2"]})
+    print(f"ENV: {os.environ["LLM2"]}")
     asyncio.run(main())
