@@ -6,7 +6,7 @@ on:
       review:
         value: ${{ jobs.review.outputs.review }}
     secrets:
-      LLM:
+      LLM2:
         required: true
 
 jobs:
