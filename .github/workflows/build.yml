@@ -44,7 +44,6 @@ jobs:
         run: |
           set -e
           pip install claude-agent-sdk
-          RESULT=$(python3 llm-detection.py app)
+          python3 llm-detection.py app
           EXIT_CODE=$?
-          echo "$RESULT"
 
