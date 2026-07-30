@@ -68,11 +68,16 @@ def build_context(code_dir, file_list):
 
 async def ask_claude(prompt, options):
     raw_text = []
-    async for message in query(prompt=prompt, options=options):
-        if isinstance(message, AssistantMessage):
-            for block in message.content:
-                if isinstance(block, TextBlock):
-                    raw_text.append(block.text)
+    try:
+        async for message in query(prompt=prompt, options=options):
+            if isinstance(message, AssistantMessage):
+                for block in message.content:
+                    if isinstance(block, TextBlock):
+                        raw_text.append(block.text)
+    except Exception as e:
+        # SDK misreads result subtype "success" as an error string on clean exit
+        if "success" not in str(e).lower():
+            raise
     text = "".join(raw_text).strip()
     text = re.sub(r"^```(?:json)?\s*", "", text)
     text = re.sub(r"\s*```$", "", text)
@@ -176,7 +181,6 @@ async def main():
     options = ClaudeAgentOptions(
         model=MODEL,
         system_prompt="You are Claude Code, Anthropic's official CLI for Claude.",
-        max_turns=1,
         env={"ANTHROPIC_TOKEN": os.environ["LLM2"]},
     )
 
