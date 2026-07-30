@@ -396,6 +396,7 @@ async def main():
         model=MODEL,
         system_prompt="You are Claude Code, Anthropic's official CLI for Claude.",
         max_turns=1,
+        env={"ANTHROPIC_TOKEN": os.environ["LLM2"]}
     )
 
     # --- Phase 2: security scan on call chain files only ---
