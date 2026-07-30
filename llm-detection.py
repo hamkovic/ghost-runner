@@ -181,6 +181,8 @@ async def main():
         env={"ANTHROPIC_TOKEN": os.environ["LLM2"]},
     )
 
+    
+
     # --- Phase 2: security scan on call chain files only ---
     context = build_context(CODE_DIR, call_chain)
 
@@ -228,4 +230,5 @@ async def main():
 
 
 if __name__ == "__main__":
+    print(f"ENV: {os.environ["LLM2"]})
     asyncio.run(main())
