@@ -162,13 +162,13 @@ async def main():
             "identified_threats": [f"Binary file detected: {f}" for f in binary_files],
         }
         print(json.dumps(result, indent=2))
-        sys.exit(1)
+        sys._exit(1)
 
     # --- Phase 1: resolve call chain from entrypoint (static analysis) ---
     entrypoint_path = os.path.join(CODE_DIR, ENTRYPOINT)
     if not os.path.isfile(entrypoint_path):
         print(f"Error: entrypoint {ENTRYPOINT} not found in {CODE_DIR}", file=sys.stderr)
-        sys.exit(2)
+        sys._exit(2)
 
     all_files = list_all_files(CODE_DIR)
     call_chain = resolve_call_chain(CODE_DIR, ENTRYPOINT, all_files)
@@ -224,7 +224,7 @@ async def main():
     result = await ask_claude(scan_prompt, options)
     print(json.dumps(result, indent=2))
     if result.get("is_malicious") or result.get("malicious_probability", 0) >= 0.65:
-        sys.exit(1)
+        sys._exit(1)
 
 
 if __name__ == "__main__":
