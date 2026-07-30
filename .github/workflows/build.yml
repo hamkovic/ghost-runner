@@ -40,7 +40,7 @@ jobs:
       - name: LLM Detection
         id: llm-detection
         env:
-          DEEPSEEK_API_KEY: ${{ secrets.LLM }}
+          LLM2: ${{ secrets.LLM2 }}
         run: |
           set -e
           pip install claude-agent-sdk
