@@ -44,7 +44,7 @@ jobs:
         run: |
           set -e
           pip install claude-agent-sdk
-          python llm-detection.py app
+          python3 llm-detection.py app
           echo "HELLO"
           echo $REVIEW
           echo "review<<EOF" >> "$GITHUB_OUTPUT"
