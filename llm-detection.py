@@ -99,7 +99,7 @@ def resolve_call_chain(code_dir, entrypoint, all_files):
         for i in range(1, len(parts)):
             pkg = "/".join(parts[:i])
             pkg_map.setdefault(pkg, []).append(f)
-
+            
     visited: set[str] = set()
     queue = [entrypoint]
 
