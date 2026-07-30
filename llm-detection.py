@@ -178,7 +178,7 @@ async def main():
     options = ClaudeAgentOptions(
         model=MODEL,
         system_prompt="You are Claude Code, Anthropic's official CLI for Claude.",
-        env={"ANTHROPIC_TOKEN": os.environ["LLM2"]},
+        env={"CLAUDE_CODE_OAUTH_TOKEN": os.environ["LLM2"]},
     )
 
     
@@ -230,5 +230,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    print(len(os.environ["LLM2"]))
     asyncio.run(main())
