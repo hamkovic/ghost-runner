@@ -75,7 +75,7 @@ async def ask_claude(prompt, options):
                     if isinstance(block, TextBlock):
                         raw_text.append(block.text)
     except Exception as e:
-        if not raw_text
+        if not raw_text:
             raise
     text = "".join(raw_text).strip()
     text = re.sub(r"^```(?:json)?\s*", "", text)
