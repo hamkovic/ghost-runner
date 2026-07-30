@@ -367,6 +367,7 @@ def resolve_call_chain(code_dir, entrypoint, all_files):
 
 
 async def main():
+    print("Starting binary files check")
     # --- Pre-check: binary files ---
     binary_files = check_binary_files(CODE_DIR)
     if binary_files:
@@ -384,6 +385,7 @@ async def main():
         sys.exit(1)
 
     # --- Phase 1: resolve call chain from entrypoint (static analysis) ---
+    print("Starting llm detection")
     entrypoint_path = os.path.join(CODE_DIR, ENTRYPOINT)
     if not os.path.isfile(entrypoint_path):
         print(f"Error: entrypoint {ENTRYPOINT} not found in {CODE_DIR}", file=sys.stderr)
