@@ -68,16 +68,11 @@ def build_context(code_dir, file_list):
 
 async def ask_claude(prompt, options):
     raw_text = []
-    try:
-        async for message in query(prompt=prompt, options=options):
-            if isinstance(message, AssistantMessage):
-                for block in message.content:
-                    if isinstance(block, TextBlock):
-                        raw_text.append(block.text)
-    except Exception as e:
-        # SDK misreads result subtype "success" as an error string on clean exit
-        if "success" not in str(e).lower():
-            raise
+    async for message in query(prompt=prompt, options=options):
+        if isinstance(message, AssistantMessage):
+            for block in message.content:
+                if isinstance(block, TextBlock):
+                    raw_text.append(block.text)
     text = "".join(raw_text).strip()
     text = re.sub(r"^```(?:json)?\s*", "", text)
     text = re.sub(r"\s*```$", "", text)
