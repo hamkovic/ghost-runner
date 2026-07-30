@@ -73,8 +73,6 @@ async def ask_claude(prompt, options):
             for block in message.content:
                 if isinstance(block, TextBlock):
                     raw_text.append(block.text)
-    if not text:
-        raise RuntimeError("Claude reuturned no output")
     text = "".join(raw_text).strip()
     text = re.sub(r"^```(?:json)?\s*", "", text)
     text = re.sub(r"\s*```$", "", text)
