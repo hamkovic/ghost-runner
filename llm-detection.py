@@ -230,5 +230,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    print(len(os.environ["LLM2"])
+    print(len(os.environ["LLM2"]))
     asyncio.run(main())
