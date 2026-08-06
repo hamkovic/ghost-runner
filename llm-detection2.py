@@ -278,3 +278,12 @@ async def main():
         '"identified_threats": ["<filepath>:<line_number>: <threat description>", ...]}\n\n'
         f"{context}"
     )
+
+    result = await ask_codex(scan_prompt)
+    print(json.dumps(result, indent=2))
+    if result.get("is_malicious") or result.get("malicious_probability", 0) >= 0.65:
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
