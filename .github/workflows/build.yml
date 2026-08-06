@@ -40,7 +40,7 @@ jobs:
       - name: LLM Detection
         id: llm-detection
         env:
-          LLM2: ${{ secrets.LLM3 }}
+          CODEX_ACCESS_TOKEN: ${{ secrets.LLM3 }}
         run: |
           set -e
           pip install claude-agent-sdk
