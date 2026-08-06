@@ -9,11 +9,11 @@ import re
 import sys
 
 from openai_codex import AsyncCodex, CodexConfig, Sandbox
-​
+
 CODE_DIR = sys.argv[1] if len(sys.argv) > 1 else "./app"
 MODEL = os.environ.get("CODEX_MODEL", "gpt-5.6-terra")
 ENTRYPOINT = "run.sh"
-​
+
 SCAN_RESULT_SCHEMA = {
     "type": "object",
     "properties": {
@@ -33,8 +33,8 @@ SCAN_RESULT_SCHEMA = {
     ],
     "additionalProperties": False,
 }
-​
-​
+
+
 def is_binary(fpath):
     try:
         with open(fpath, "rb") as fh:
@@ -42,8 +42,8 @@ def is_binary(fpath):
         return b"\x00" in chunk
     except Exception:
         return False
-​
-​
+
+
 def check_binary_files(code_dir):
     found = []
     for root, dirs, files in os.walk(code_dir):
@@ -53,8 +53,8 @@ def check_binary_files(code_dir):
             if is_binary(fpath):
                 found.append(os.path.relpath(fpath, code_dir))
     return found
-​
-​
+
+
 def list_all_files(code_dir):
     paths = []
     for root, dirs, files in os.walk(code_dir):
@@ -63,8 +63,8 @@ def list_all_files(code_dir):
             fpath = os.path.join(root, fname)
             paths.append(os.path.relpath(fpath, code_dir))
     return paths
-​
-​
+
+
 def read_file(code_dir, rel_path):
     fpath = os.path.normpath(os.path.join(code_dir, rel_path))
     if not fpath.startswith(os.path.normpath(code_dir)):
@@ -74,36 +74,36 @@ def read_file(code_dir, rel_path):
             return fh.read().decode("utf-8", errors="replace")
     except Exception as e:
         return f"[unreadable: {e}]"
-​
-​
+
+
 def build_context(code_dir, file_list):
     parts = []
     for rel in file_list:
         content = read_file(code_dir, rel)
         parts.append(f"=== {rel} ===\n{content}")
     return "\n\n".join(parts)
-​
-​
+
+
 def get_openai_api_key():
     key = os.environ.get("OPENAI_API_KEY") or os.environ.get("openai_api_key")
     if key and key.startswith("sk-"):
         return key
     return None
-​
-​
+
+
 def get_codex_access_token():
     token = os.environ.get("CODEX_ACCESS_TOKEN")
     if token:
         return token
-​
+
     # Some callers provide a Codex access token through their generic API-key
     # variable. Route that credential through Codex's supported token path.
     key = os.environ.get("OPENAI_API_KEY") or os.environ.get("openai_api_key")
     if key and not key.startswith("sk-"):
         return key
     return None
-​
-​
+
+
 async def ask_codex(prompt):
     api_key = get_openai_api_key()
     access_token = get_codex_access_token()
@@ -112,7 +112,7 @@ async def ask_codex(prompt):
             "Set OPENAI_API_KEY/openai_api_key to an OpenAI Platform API key "
             "or CODEX_ACCESS_TOKEN to a Codex access token"
         )
-​
+
     config = None
     if access_token:
         config = CodexConfig(
@@ -121,11 +121,11 @@ async def ask_codex(prompt):
                 "OPENAI_API_KEY": "",
             }
         )
-​
+
     async with AsyncCodex(config=config) as codex:
         if api_key:
             await codex.login_api_key(api_key)
-​
+
         thread = await codex.thread_start(
             model=MODEL,
             sandbox=Sandbox.read_only,
@@ -136,18 +136,18 @@ async def ask_codex(prompt):
             output_schema=SCAN_RESULT_SCHEMA,
             sandbox=Sandbox.read_only,
         )
-​
+
     text = (result.final_response or "").strip()
     if not text:
         raise RuntimeError("Codex returned no final response")
     text = re.sub(r"^```(?:json)?\s*", "", text)
     text = re.sub(r"\s*```$", "", text)
     return json.loads(text)
-​
-​
+
+
 def resolve_call_chain(code_dir, entrypoint, all_files):
     """Statically walk the call chain starting from entrypoint.
-​
+
     For Python packages, all files within a referenced package directory are
     included — importing any module loads the whole package (__init__.py and
     siblings), so a per-file approach misses transitive references.
@@ -160,27 +160,27 @@ def resolve_call_chain(code_dir, entrypoint, all_files):
         for i in range(1, len(parts)):
             pkg = "/".join(parts[:i])
             pkg_map.setdefault(pkg, []).append(f)
-​
+
     visited: set[str] = set()
     queue = [entrypoint]
-​
+
     sh_patterns = re.compile(
         r'(?:source|\.)\s+([\w./\-]+)|'
         r'(?:bash|sh|python3?|node|ruby|perl)\s+([\w./\-]+)|'
         r'\b([\w./\-]+\.(?:sh|py|rb|js|pl))\b'
     )
     py_import = re.compile(r'^\s*(?:import|from)\s+([\w.]+)', re.MULTILINE)
-​
+
     def enqueue(path):
         if path not in visited and path in file_set:
             queue.append(path)
-​
+
     while queue:
         rel = queue.pop()
         if rel in visited:
             continue
         visited.add(rel)
-​
+
         fpath = os.path.join(code_dir, rel)
         if not os.path.isfile(fpath):
             continue
@@ -188,7 +188,7 @@ def resolve_call_chain(code_dir, entrypoint, all_files):
             content = open(fpath, "r", errors="replace").read()
         except Exception:
             continue
-​
+
         ext = os.path.splitext(rel)[1]
         if ext in (".sh", ".bash", "") or rel.endswith(".sh"):
             for m in sh_patterns.finditer(content):
@@ -209,10 +209,10 @@ def resolve_call_chain(code_dir, entrypoint, all_files):
                     prefix = "/".join(parts[:i])
                     for pkg_file in pkg_map.get(prefix, []):
                         enqueue(pkg_file)
-​
+
     return sorted(visited)
-​
-​
+
+
 async def main():
     # --- Pre-check: binary files ---
     binary_files = check_binary_files(CODE_DIR)
@@ -229,19 +229,19 @@ async def main():
         }
         print(json.dumps(result, indent=2))
         sys.exit(1)
-​
+
     # --- Phase 1: resolve call chain from entrypoint (static analysis) ---
     entrypoint_path = os.path.join(CODE_DIR, ENTRYPOINT)
     if not os.path.isfile(entrypoint_path):
         print(f"Error: entrypoint {ENTRYPOINT} not found in {CODE_DIR}", file=sys.stderr)
         sys.exit(2)
-​
+
     all_files = list_all_files(CODE_DIR)
     call_chain = resolve_call_chain(CODE_DIR, ENTRYPOINT, all_files)
-​
+
     # --- Phase 2: security scan on call chain files only ---
     context = build_context(CODE_DIR, call_chain)
-​
+
     scan_prompt = (
         "You are a senior security analyst. "
         f"The following {len(call_chain)} file(s) are part of the execution call chain "
