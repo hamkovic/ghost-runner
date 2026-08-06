@@ -7,7 +7,7 @@ import json
 import os
 import re
 import sys
-​
+
 from openai_codex import AsyncCodex, CodexConfig, Sandbox
 ​
 CODE_DIR = sys.argv[1] if len(sys.argv) > 1 else "./app"
