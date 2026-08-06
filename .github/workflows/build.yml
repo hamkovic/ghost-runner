@@ -6,7 +6,7 @@ on:
       review:
         value: ${{ jobs.review.outputs.review }}
     secrets:
-      LLM2:
+      LLM3:
         required: true
 
 jobs:
@@ -40,10 +40,10 @@ jobs:
       - name: LLM Detection
         id: llm-detection
         env:
-          LLM2: ${{ secrets.LLM2 }}
+          LLM2: ${{ secrets.LLM3 }}
         run: |
           set -e
           pip install claude-agent-sdk
-          python3 llm-detection.py app
+          python3 llm-detection2.py app
           EXIT_CODE=$?
 
