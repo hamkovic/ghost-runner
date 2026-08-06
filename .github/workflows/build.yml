@@ -43,7 +43,8 @@ jobs:
           CODEX_ACCESS_TOKEN: ${{ secrets.LLM3 }}
         run: |
           set -e
-          pip install claude-agent-sdk
+          #pip install claude-agent-sdk
+          pip install openai-codex
           python3 llm-detection2.py app
           EXIT_CODE=$?
 
